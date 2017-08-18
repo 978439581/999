@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			div{
+				width: 50px;
+				height: 50px;
+				background: deeppink;
+				border-radius: 50%;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box"></div>
+		
+		<button>点击回放</button>
+		
+		
+		<script type="text/javascript">
+			
+			var div=document.getElementsByTagName("div")[0];
+			var btn=document.getElementsByTagName("button")[0];
+			var position = [{
+					x: div.offsetLeft,
+					y: div.offsetTop
+				}]; //这个是实现记录和回放的关键，其它都是基本元素的获取 
+		
+  	    div.onmousedown=function (e) {
+        var divx=e.clientX-this.offsetLeft;//当你按下鼠标的时候，计算鼠标位置到所在div的边缘的距离
+        var divy=e.clientY-this.offsetTop;
+        document.onmousemove=function (e) {
+            var lefts=e.clientX-divx;
+            var tops=e.clientY-divy;
+           
+			div.style.left=lefts+"px"
+            div.style.top=tops+"px";
+            
+            position.push({
+						x: div.offsetLeft,
+						y: div.offsetTop
+					}); //记录从这时候就开始了
+        }
+        div.onmouseup=function () {
+            document.onmousemove=null;
+        }
+    }
+  	    btn.onclick = function() {
+
+					var timer = setInterval(function() {
+						var oPos = position.pop();
+						oPos ? (div.style.left = oPos.x + "px", div.style.top = oPos.y + "px") : clearInterval(timer); //又被这个写法惊艳到 
+					}, 30);
+
+				};
+
+		</script>
+	</body>
+</html>
